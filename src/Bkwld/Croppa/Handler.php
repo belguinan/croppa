@@ -1,4 +1,6 @@
-<?php namespace Bkwld\Croppa;
+<?php 
+
+namespace Bkwld\Croppa;
 
 // Deps
 use Illuminate\Http\Request;
@@ -88,8 +90,7 @@ class Handler extends Controller {
 
         // If the crops_dir is a remote disk and if the crop has already been
         // created.  If it has, just return that path.
-        if ($this->storage->cropsAreRemote()
-            && $this->storage->cropExists($crop_path)) {
+        if ($this->storage->cropExists($crop_path)) {
             return $crop_path;
         }
 
