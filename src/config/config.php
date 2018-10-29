@@ -15,7 +15,7 @@
      *      string  IoC binding name of League\Flysystem\Filesystem
      *      string  IoC binding name of League\Flysystem\Cached\CachedAdapter
      */
-    'src_dir' => public_path().'/uploads',
+    'src_dir' => storage_path('app/public'),
 
     /**
      * The directory where cropped images should be saved. The route to the
@@ -26,7 +26,7 @@
      *      string  IoC binding name of League\Flysystem\Filesystem
      *      string  IoC binding name of League\Flysystem\Cached\CachedAdapter
      */
-    'crops_dir' => public_path().'/uploads',
+    'crops_dir' => storage_path('app/public'),
 
     /**
      * Maximum number of sizes to allow for a particular source file. This is to
@@ -55,7 +55,7 @@
      *
      * @var string
      */
-    'path' => 'uploads/(.*)$',
+    'path' => 'storage/(.*)$',
 
     /**
      * A regex pattern that works like `path` except it is only used by the
@@ -87,7 +87,7 @@
      *
      * @var string | boolean
      */
-    'signing_key' => 'app.key',
+    'signing_key' => false,
 
     /**
      * The PHP memory limit used by the script to generate thumbnails. Some
@@ -110,7 +110,7 @@
      *
      * @var integer
      */
-    'jpeg_quality' => 95,
+    'jpeg_quality' => 75,
 
     /**
      * Turn on interlacing to make progessive jpegs.
