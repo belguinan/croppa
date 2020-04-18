@@ -60,20 +60,23 @@ class Handler extends Controller {
             throw new NotFoundHttpException('Token mismatch');
         }
 
-        // Create the image file
-        $crop_path = $this->render($request);
+        try {
+            // Create the image file
+            $crop_path = $this->render($request);
+        } catch (\Exception $e) {
+            $crop_path = '';
+        }
 
         // Redirect to remote crops ...
         if ($this->storage->cropsAreRemote()) {
             return new RedirectResponse($this->url->pathToUrl($crop_path), 301);
+        }
 
         // ... or echo the image data to the browser
-        } else {
-            $absolute_path = $this->storage->getLocalCropsDirPath() . '/' . $crop_path;
-            return new BinaryFileResponse($absolute_path, 200, [
-                'Content-Type' => $this->getContentType($absolute_path),
-            ]);
-        }
+        $absolute_path = $this->storage->getLocalCropsDirPath() . '/' . $crop_path;
+        return new BinaryFileResponse($absolute_path, 200, [
+            'Content-Type' => $this->getContentType($absolute_path),
+        ]);
     }
 
 
@@ -107,16 +110,20 @@ class Handler extends Controller {
             ini_set('memory_limit', $this->config['memory_limit']);
         }
 
-        // Build a new image using fetched image data
-        $image = new Image(
-            $this->storage->readSrc($path),
-            $this->url->phpThumbConfig($options)
-        );
+        try {
+            // Build a new image using fetched image data
+            $image = new Image(
+                $this->storage->readSrc($path),
+                $this->url->phpThumbConfig($options)
+            );
 
-        // Process the image and write its data to disk
-        $this->storage->writeCrop($crop_path,
-            $image->process($width, $height, $options)->get()
-        );
+            // Process the image and write its data to disk
+            $this->storage->writeCrop($crop_path,
+                $image->process($width, $height, $options)->get()
+            );
+        } catch (\Exception $e) {
+            
+        }
 
         // Return the paht to the crop, relative to the storage disk
         return $crop_path;
